@@ -1,0 +1,241 @@
+---
+title: "Exercise 5: Simple Data Exploration <br><small>Geographic Information Systems 1 Lab</small></br>"
+author: "GEOG 3150"
+output:
+  html_notebook:
+    df_print: paged
+    rows.print: 10
+    theme: cosmo
+    highlight: breezedark
+    number_sections: yes
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+  pdf_document: default
+  html_document:
+    toc: yes
+    df_print: paged
+editor_options:
+  chunk_output_type: inline
+  mode: gfm
+---
+
+```{=html}
+<style type="text/css">
+
+h1.title {
+  font-size: 40px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkBlue;
+  text-align: center;
+}
+h4.author { /* Header 4 - and the author and data headers use this too  */
+  font-size: 20px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkBlue;
+  text-align: center;
+}
+
+.zoom {
+  transform-origin: 40% 50% 0;
+  transition: transform .2s;
+  margin: 0 auto;
+}
+.zoom img{
+	width:auto;
+	height:auto;	
+}
+.zoom:hover {
+  transform: scale(2);
+}
+
+th, td {padding: 5px;}
+
+</style>
+```
+<hr></hr>
+
+The purpose of this exercise is to help familiarize you with simple ways to explore attributes in various datasets. These skills will help you extract new datasets, connect to tabular data, and qualitatively compare different variables.
+
+# The Introduction
+
+With the unprecedented growth in middle Tennessee, the Montgomery County Commission, Stormwater Management, and Health Department are working with the Tennessee Department of Environment and Conservation on an initiative to assess the relationship of brownfield sites to our community and watersheds. Brownfields are locations in communities that pose risks to future land use and development as a result of previous land use practices, particularly commercial and industrial (check out more information on brownfields here: [https://www.osha.gov/brownfields/brownfields-qna](https://www.osha.gov/brownfields/brownfields-qna)). They often contain high levels of soil and water contamination, and in some cases pollutants can remain in the ecosystem for decades. Unfortunately, brownfields are often point source locations for ground and surface water contamination. 
+The goal of the initiative is to determine if there are any spatial characteristics of these hazardous locations that have the potential to impact current and future residents of the area. The primary objectives of the initative are to: a) examine the location of brownfields in the county, b) determine which watersheds would be primarily impacted, and c) ascertain if there is a relationship between brownfield sites and any particular demographics in teh county. With these three objectives, the county partners may make data-informed decisions to best support and prioritize programs that keep our community and environment safe.
+
+In this exercise you will:
+
+-   Continue working with geoprocessing tools
+-   Obtain and import data from external sources
+-   Learn to link tabular data
+-   Qualitatively compare datasets
+
+Software specific directions can be found for each step below. Please submit the answer to the questions and your final map by the due date.
+
+## Step One: The Data
+
+Blah...blah...blah...
+
+<details>
+<summary><big>View Directions in <b> [ArcGIS Pro]{style="color:#ff4500"} </b></big></summary>
+
+Blah...blah...blah...
+
+<big><b>Question No. 1</b></big>
+<blockquote>
+_Insert Text Here_
+</blockquote>
+
+</details>
+<hr></hr>
+
+<details>
+<summary><big>View directions in <b> [QGIS]{style="color: #006400"} </b></big></summary>
+
+Blah...blah...blah...
+
+<big><b>Question No. 1</b></big>
+<blockquote>
+_Insert Text Here_
+</blockquote>
+
+</details>
+<hr></hr>
+
+<details><summary><big>View directions in <b> [R]{style="color: #6495ED"} </b></span></big></summary>
+Before you begin, you will need to open the [Ex2 Colab Notebook](https://github.com/chrismgentry/GIS1-Exercise-9/blob/main/GIS1_EX9.ipynb) and insert **tocolab** after _github_ in the URL to open in the _Colab Environment_. As you have seen before, R requires various packages to complete certain analyses. In this exercise you will be using **tidyverse, OpenStreetMaps, ggfortify, maptools, and rgeos**. To install and load the packages we will use the following script:
+
+Blah...blah...blah...
+
+<big><b>Question No. 1</b></big>
+<blockquote>
+_Insert Text Here_
+</blockquote>
+
+</details>
+
+## Step Two: The Analyses
+
+Blah...blah...blah...
+
+<details>
+<summary><big>View Directions in <b> [ArcGIS Pro]{style="color:#ff4500"} </b></big></summary>
+
+Blah...blah...blah...
+
+<big><b>Question No. 2</b></big>
+<blockquote>
+_Insert Text Here_
+</blockquote>
+
+</details>
+<hr></hr>
+
+<details>
+<summary><big>View Directions in <b> [QGIS]{style="color:#006400"} </b></big></summary>
+
+Blah...blah...blah...
+
+<big><b>Question No. 2</b></big>
+<blockquote>
+_Insert Text Here_
+</blockquote>
+
+</details>
+<hr></hr>
+
+<details>
+<summary><big>View Directions in <b> [R]{style="color:#6495ED"} </b></big></summary>
+
+Blah...blah...blah...
+
+<big><b>Question No. 2</b></big>
+<blockquote>
+_Insert Text Here_
+</blockquote>
+
+</details>
+
+## Step Three: The Visualization
+
+Blah...blah...blah...
+
+<details><summary><big>View directions in <b> [ArcGIS Pro]{style="color:#ff4500"} </b></span></big></summary>
+
+Blah...blah...blah...
+
+<big><b>Question No. 3</b></big>
+<blockquote>
+_Insert Text Here_
+</blockquote>
+
+</details>
+<hr></hr>
+
+<details><summary><big>View directions in <b> [QGIS]{style="color:#006400"} </b></span></big></summary>
+
+Blah...blah...blah...
+
+<big><b>Question No. 3</b></big>
+<blockquote>
+_Insert Text Here_
+</blockquote>
+
+</details>
+<hr></hr>
+
+<details><summary><big>View directions in <b> [R]{style="color:#6495ED"} </b></span></big></summary>
+
+Blah...blah...blah...
+
+<big><b>Question No. 3</b></big>
+<blockquote>
+_Insert Text Here_
+</blockquote>
+
+</details>
+
+## Step Four: The Proposal
+
+Blah...blah...blah...
+
+<details><summary><big>View directions in <b> [ArcGIS Pro]{style="color:#ff4500"} </b></span></big></summary>
+
+Blah...blah...blah...
+
+<big><b>Question No. 4</b></big>
+<blockquote>
+_Insert Text Here_
+</blockquote>
+
+</details>
+<hr></hr>
+
+<details><summary><big>View directions in <b> [QGIS]{style="color:#006400"} </b></span></big></summary>
+
+Blah...blah...blah...
+
+<big><b>Question No. 4</b></big>
+<blockquote>
+_Insert Text Here_
+</blockquote>
+
+</details>
+<hr></hr>
+
+<details><summary><big>View directions in <b> [R]{style="color:#6495ED"} </b></span></big></summary>
+
+Blah...blah...blah...
+
+<big><b>Question No. 4</b></big>
+<blockquote>
+_Insert Text Here_
+</blockquote>
+
+</details>
+
+# The Write-Up
+
+Blah...blah...blah...
+
+When complete, send a link to your _Colab Notebook_ or word document with answers to Questions 1-4 and your completed map via email.
