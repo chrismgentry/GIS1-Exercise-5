@@ -13,3 +13,4 @@ previous_index.html
 *.shp
 *.shx
 *.R
+*.lock

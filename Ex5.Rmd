@@ -74,18 +74,45 @@ Software specific directions can be found for each step below. Please submit the
 
 ## Step One: The Data
 
-Blah...blah...blah...
+The datasets used in this exercise will be found on the [Exercise 5](https://github.com/chrismgentry/GIS1-Exercise-5) Github Page, previous exercises such as [Exercise 2](https://github.com/chrismgentry/GIS1-Exercise-2) and [Exercise 3](https://github.com/chrismgentry/GIS1-Exercise-3), and also from the [Tennessee Geographic Information Council](http://www.tngis.org/data-collections.htm). **TN GIS** maintains a number of datasets in their collections that are useful for projects involving the state of Tennessee. 
 
 <details>
 <summary><big>View Directions in <b> [ArcGIS Pro]{style="color:#ff4500"} </b></big></summary>
 
-Blah...blah...blah...
+As with previous exercises you should begin by launching [ArcGIS Pro]{style="color:#ff4500"}, creating a new blank template, and creating a folder for this specific exercise. You should now see the typical starting screen that greeted you in all of the previous exercises. While some of the data you may already have in previous exercise folders, you will start his lab by downloading a dataset from **TN GIS**. While they maintain a number of quality collections, you will specifically download the _statewide watershed coverage (12 digit Hydrologic Unit Code)_ for Tennessee. This information can be found at the following link: [http://www.tngis.org/water.htm](http://www.tngis.org/water.htm). On that page you will find the link for **"Download Watershed Coverage"**. Click the link, and using the download button <img src= "Images/google-drive-download.jpg" alt="Google Drive Download Button" width = "20" height = "20"> in the upper-right corner, save the _tn_wbd_ zip file to your project folder.
 
-<big><b>Question No. 1</b></big>
+<p align="center"><img src= "Images/tngis-website.png" alt="TN GIS Water Data Download" style="width:100%"></p>
+
+Once you have downloaded the file, navigate to the saved location to unzip the file. Within the unzipped folder you will find three additional folders titled:
+
+- tn_8dig_huc
+- tn_12dig_huc
+- tn_250k_huc
+
+These are watershed files at varying levels of detail. For hydrologic units you are looking for one with the largest number of digits to get the largest scale data. So for this exercise you will unzip the **tn_12dig_huc** dataset.
+
+<p align="center"><img src= "Images/second-unzip.jpg" alt="tn_12dig_huc.zip extract" style="width:100%"></p>
+
+Finally, with that final folder extracted you will find a folder titled _hydrologic_units_ that will contain a shapefile named **wbdhu12_a_tn.shp** that will be used in this exercise. This is the polygon file representing the 12 digit hydrologic unit codes for the entire state of Tennessee.
+
+Next, you will need the _tornado_data_ file from Exercise 2 and the _census_tracts_ data from Exercise 3. You have a few options for obtaining this data. You can download the data again (but this time to the new project folder), you can navigate to the Exercise 2 and Exercise 3 project folders, respectively, on your computer and copy the zip files to the Exercise 5 project folder, or you can copy the data over using the catalog pane in [ArcGIS Pro]{style="color:#ff4500"}. While the first two options are relatively straight forward, it is important to learn how to navigate and use the catalog in ArcGIS. 
+
+On the _View_ tab, click the Catalog Pane button <img src= "Images/catalog-pane-button.jpg" alt="Catalong Pane Button" width = "14" height = "20"> to open the Catalog Window Pane on the right side of the screen. On the project tab, right-click on the folders option and click "Add Folder Connection. In the resulting window navigate to the folder you would like to connect to and single-click the folder to select it. You don't want to double-click into the folder. You should see the name of the folder appear at the bottom of the window and the OK button should be available.
+
+<p align="center"><img src= "Images/catalog-pane-windows.png" alt="Accessing Catalog Pane" style="width:100%"></p>
+
+Once you have connected to the additional folders you want to use in conjunction with this project you can navigate to them within the _Folders_ link in the Catalog Pane. While you could add data directly from the other folders, the best practice might be to copy the data from one project to another. If for example you plan to alter the data then using it directly from the previous folder would alter it there as well. This could cause future issues when returning to that project. For this exercise you can navigate to the Exercise 2 folder and copy the _tornado_data_ file and paste it in the Exercise 5 folder. This is the safest way to move data such as shapefiles or geodatabases. Because the various data types contain numerous individual files to make up a dataset, catalog will copy/move them all correctly. If you tried to move them using File Explorer and missed one of the files associated with that data it might not work appropriately. So for Exercise 5, you will need to copy the _tornado_data_ and _montco_tracts_ data from exercises two and three respectively.
+
+<p align="center"><div class="zoom"><img src= "Images/catalog-copy-paste.png" alt="Copy and Paste Data in Catalog Pane" style="width:100%"></div></p>
+
+Finally, you will need to download the **Brownfields** and **Demographics** data from the [Exercise 5, GitHub Data](https://github.com/chrismgentry/GIS1-Exercise-5/tree/main/Data) page. Save both in your Exercise 5 project folder and unzip the **brownfields.zip** file to access the dataset.
+
+<big><b>Question No. 1</b></big><br>
+Using **File Explorer**, examine the dataset contained in the _brownfields.zip_ file and answer the following question:
 <blockquote>
-_Insert Text Here_
+What is the common name of the extracted files? How many are there? What are the various file extensions?
 </blockquote>
-
+<small>The library of Congress has a great description of the various extensions [here](https://www.loc.gov/preservation/digital/formats/fdd/fdd000280.shtml).</small>
 </details>
 <hr></hr>
 
@@ -103,7 +130,7 @@ _Insert Text Here_
 <hr></hr>
 
 <details><summary><big>View directions in <b> [R]{style="color: #6495ED"} </b></span></big></summary>
-Before you begin, you will need to open the [Ex2 Colab Notebook](https://github.com/chrismgentry/GIS1-Exercise-9/blob/main/GIS1_EX9.ipynb) and insert **tocolab** after _github_ in the URL to open in the _Colab Environment_. As you have seen before, R requires various packages to complete certain analyses. In this exercise you will be using **tidyverse, OpenStreetMaps, ggfortify, maptools, and rgeos**. To install and load the packages we will use the following script:
+Before you begin, you will need to open the [Ex2 Colab Notebook](https://github.com/chrismgentry/GIS1-Exercise-5/blob/main/GIS1_EX5.ipynb) and insert **tocolab** after _github_ in the URL to open in the _Colab Environment_. As you have seen before, R requires various packages to complete certain analyses. In this exercise you will be using **tidyverse, OpenStreetMaps, ggfortify, maptools, and rgeos**. To install and load the packages we will use the following script:
 
 Blah...blah...blah...
 
@@ -116,12 +143,31 @@ _Insert Text Here_
 
 ## Step Two: The Analyses
 
-Blah...blah...blah...
+The data collected in the previous section requires additional processing so you can reduce the dataset to only the pertinent information for the analyses. In this step you will use additional geoprocessing techniques and data management tools to link two datasets for further examination.
 
 <details>
 <summary><big>View Directions in <b> [ArcGIS Pro]{style="color:#ff4500"} </b></big></summary>
 
-Blah...blah...blah...
+With the data collected you can now add the _brownfields_, census tracts, _tornado_data_, and _wbdhu12_a_tn_ (watersheds) data to your project. Although there are a number of ways of isolating data to make derived datasets (e.g. Select > Lasso in [Exercise 4, Step 1](https://chrismgentry.github.io/GIS1-Exercise-4/#11_Step_One:_The_Data), in this exercise you will use another tool from the **Geoprocessing** Toolbox to complete this task. On the _View Tab_ click on the Geoprocessing Toolbox button <img src= "Images/geoprocessing-button.jpg" alt="Geoprocessing Button" width = "20" height = "20"> to open the Geoprocessing pane on the right side of the screen. By navigating through the tools menus you will find **Select** under _Analysis Tools > Extract_. 
+With this tool you will write a simple expression to "select" a small portion of the data you need for further analysis. To do this, double-click the _Select_ tool and in the resulting pane input the following parameters:
+
+- Input Features = tornado_data
+- Output Feature Class = Here you will insert the file name you want to use. Click on the folder icon to the right of the field and in the new window save the file as _montgomery_county.shp_ in your project folder.
+- Expression = Click the drop-down button for the new expression <img src= "Images/new-expression-button.jpg" alt="Expression Button" width = "87" height = "20"> button and use the drop-down boxes to provide the following information: 
+  - Where _NAME_ &nbsp; _is equal to_ &nbsp; _Montgomery_
+  - Click Run
+
+<p align="center"><div class="zoom"><img src= "Images/select-geoprocessing.png" alt="Select Geoprocessing Tool" style="width:100%"></div></p>
+
+This will add the new **montgomery_county** shapefile to your contents. You can now remove the tornado dataset because it will no longer be needed. With the outline of Montgomery County now available you can now use the **Clip** tool like in [Exercise 4, Step One](https://chrismgentry.github.io/GIS1-Exercise-4/#11_Step_One:_The_Data) to clip the _brownfields_ and _watersheds_ datasets to reduce them to only those within Montgomery County. If you receive a "Datum conflict" warning, for the purposes of this exercise, you can ignore it an continue with the clip. Recall that the _Input Features_ is the data you want to reduce, the _Clip Feature_ is the data you want it to take the shape of, and _Output Feature Class_ is what you are naming the new file.
+
+<p align="center"><div class="zoom"><img src= "Images/clipped-data.png" alt="Select Clipped Datasets" style="width:100%"></div></p>
+
+With the new clipped datasets you can remove or just uncheck (in case you want to use them in your final map) the full _brownfields_ and _watersheds_ datasets to reduce clutter. You can also now zoom in closer to view only Montgomery County.
+
+In the final step to prepare the data, you are going to connect a non-spatial data to the census tract dataset. In [Step One](https://chrismgentry.github.io/GIS1-Exercise-5/#11_Step_One:_The_Data) you downloaded a file titled **demographics.csv**. This file contains comma-separated values detailing additional demographic data that you need to append to the census tract data. Although the process is relatively straight-forward, there are a number of steps that need to be taken in order to join the data.
+
+First, if you haven't already, add the _demographics.csv_ file to your table of contents. This can be done from the Catalog Pane or with the "Add Data" button <img src= "Images/arcgis-add-data-button.png" alt="Add Data Button" width = "16" height = "20"> like in previous exercises.
 
 <big><b>Question No. 2</b></big>
 <blockquote>
