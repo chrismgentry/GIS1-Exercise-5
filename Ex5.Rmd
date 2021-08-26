@@ -61,7 +61,7 @@ The purpose of this exercise is to help familiarize you with simple ways to expl
 # The Introduction
 
 With the unprecedented growth in middle Tennessee, the Montgomery County Commission, Stormwater Management, and Health Department are working with the Tennessee Department of Environment and Conservation on an initiative to assess the relationship of brownfield sites to our community and watersheds. Brownfields are locations in communities that pose risks to future land use and development as a result of previous land use practices, particularly commercial and industrial (check out more information on brownfields here: [https://www.osha.gov/brownfields/brownfields-qna](https://www.osha.gov/brownfields/brownfields-qna)). They often contain high levels of soil and water contamination, and in some cases pollutants can remain in the ecosystem for decades. Unfortunately, brownfields are often point source locations for ground and surface water contamination. 
-The goal of the initiative is to determine if there are any spatial characteristics of these hazardous locations that have the potential to impact current and future residents of the area. The primary objectives of the initative are to: a) examine the location of brownfields in the county, b) determine which watersheds would be primarily impacted, and c) ascertain if there is a relationship between brownfield sites and any particular demographics in teh county. With these three objectives, the county partners may make data-informed decisions to best support and prioritize programs that keep our community and environment safe.
+The goal of the initiative is to determine if there are any spatial characteristics of these hazardous locations that have the potential to impact current and future residents of the area. The primary objectives of the initative are to: a) examine the location of brownfields in the county, b) determine which watersheds would be primarily impacted, and c) ascertain if there is a relationship between brownfield sites and any particular demographics in the county. With these three objectives, the county partners may make data-informed decisions to best support and prioritize programs that keep our community and environment safe.
 
 In this exercise you will:
 
@@ -148,18 +148,19 @@ The data collected in the previous section requires additional processing so you
 <details>
 <summary><big>View Directions in <b> [ArcGIS Pro]{style="color:#ff4500"} </b></big></summary>
 
-With the data collected you can now add the _brownfields_, census tracts, _tornado_data_, and _wbdhu12_a_tn_ (watersheds) data to your project. Although there are a number of ways of isolating data to make derived datasets (e.g. Select > Lasso in [Exercise 4, Step 1](https://chrismgentry.github.io/GIS1-Exercise-4/#11_Step_One:_The_Data), in this exercise you will use another tool from the **Geoprocessing** Toolbox to complete this task. On the _View Tab_ click on the Geoprocessing Toolbox button <img src= "Images/geoprocessing-button.jpg" alt="Geoprocessing Button" width = "20" height = "20"> to open the Geoprocessing pane on the right side of the screen. By navigating through the tools menus you will find **Select** under _Analysis Tools > Extract_. 
+With the data collected you can now add the _brownfields_, census tracts, _tornado_data_, and _wbdhu12_a_tn_ (watersheds) data to your project. Although there are a number of ways of isolating data to make derived datasets (e.g. Select > Lasso in [Exercise 4, Step 1](https://chrismgentry.github.io/GIS1-Exercise-4/#11_Step_One:_The_Data)), in this exercise you will use another tool from the **Geoprocessing** Toolbox to complete this task. On the _View Tab_ click on the Geoprocessing Toolbox button <img src= "Images/geoprocessing-button.jpg" alt="Geoprocessing Button" width = "20" height = "20"> to open the Geoprocessing pane on the right side of the screen. By navigating through the tools menus you will find **Select** under _Analysis Tools > Extract_. 
 With this tool you will write a simple expression to "select" a small portion of the data you need for further analysis. To do this, double-click the _Select_ tool and in the resulting pane input the following parameters:
 
-- Input Features = tornado_data
+- Input Features = tornado_data\*
 - Output Feature Class = Here you will insert the file name you want to use. Click on the folder icon to the right of the field and in the new window save the file as _montgomery_county.shp_ in your project folder.
 - Expression = Click the drop-down button for the new expression <img src= "Images/new-expression-button.jpg" alt="Expression Button" width = "87" height = "20"> button and use the drop-down boxes to provide the following information: 
   - Where _NAME_ &nbsp; _is equal to_ &nbsp; _Montgomery_
   - Click Run
 
 <p align="center"><div class="zoom"><img src= "Images/select-geoprocessing.png" alt="Select Geoprocessing Tool" style="width:100%"></div></p>
+\*The tornado dataset is only being used to obtain a polygon for Montgomery County for the clip process in the next step. 
 
-This will add the new **montgomery_county** shapefile to your contents. You can now remove the tornado dataset because it will no longer be needed. With the outline of Montgomery County now available you can now use the **Clip** tool like in [Exercise 4, Step One](https://chrismgentry.github.io/GIS1-Exercise-4/#11_Step_One:_The_Data) to clip the _brownfields_ and _watersheds_ datasets to reduce them to only those within Montgomery County. If you receive a "Datum conflict" warning, for the purposes of this exercise, you can ignore it an continue with the clip. Recall that the _Input Features_ is the data you want to reduce, the _Clip Feature_ is the data you want it to take the shape of, and _Output Feature Class_ is what you are naming the new file.
+This will add the new **montgomery_county** shapefile to your contents. You can now remove the tornado dataset because it will no longer be needed. With the polygon of Montgomery County available you can now use the **Clip** tool like in [Exercise 4, Step One](https://chrismgentry.github.io/GIS1-Exercise-4/#11_Step_One:_The_Data) to clip the _brownfields_ and _watersheds_ datasets to reduce them to only those within Montgomery County. If you receive a "Datum conflict" warning, for the purposes of this exercise, you can ignore it an continue with the clip. Recall that the _Input Features_ is the data you want to reduce, the _Clip Feature_ is the data you want it to take the shape of, and _Output Feature Class_ is what you are naming the new file. Refer back to [Exercise 4, Step One](https://chrismgentry.github.io/GIS1-Exercise-4/#11_Step_One:_The_Data) for more information about Clip.
 
 <p align="center"><div class="zoom"><img src= "Images/clipped-data.png" alt="Select Clipped Datasets" style="width:100%"></div></p>
 
@@ -167,11 +168,36 @@ With the new clipped datasets you can remove or just uncheck (in case you want t
 
 In the final step to prepare the data, you are going to connect a non-spatial data to the census tract dataset. In [Step One](https://chrismgentry.github.io/GIS1-Exercise-5/#11_Step_One:_The_Data) you downloaded a file titled **demographics.csv**. This file contains comma-separated values detailing additional demographic data that you need to append to the census tract data. Although the process is relatively straight-forward, there are a number of steps that need to be taken in order to join the data.
 
-First, if you haven't already, add the _demographics.csv_ file to your table of contents. This can be done from the Catalog Pane or with the "Add Data" button <img src= "Images/arcgis-add-data-button.png" alt="Add Data Button" width = "16" height = "20"> like in previous exercises.
+First, if you haven't already, add the _demographics.csv_ file to your table of contents. This can be done from the Catalog Pane or with the "Add Data" button <img src= "Images/arcgis-add-data-button.png" alt="Add Data Button" width = "16" height = "20"> like in previous exercises. Because [ArcGIS Pro]{style="color:#ff4500"} treats \*.csv files as "read only" you need to convert it to a table that can be edited in the software. Now, right-click on the _demographics.csv_ standalone table and go to **Data > Export Table**. In the resulting window choose the following options:
+
+- Input Rows = demographics.csv
+- Output Location = Similar to before, navigate only to your project folder and click once to select. In the step you are simply designating the folder the file is to be saved.
+- Output Name = Give the file a new name such as demo_table.dbf
+
+Before clicking OK, you need to expand the **Fields** section of the window and click on _Tract_ in the Output Fields column. Then click on the _Properties_ Tab and change the **Type** field to _Text_. Then click OK. If you continued without changing the field type, the variable would most likely be treated as a numerical value. If you open the attribute table for any dataset and mouse-over the variable column without clicking a pop-up window will appear detailing the _Type_ and other parameters of the variable. In the census dataset from the previous exercise, the _NAME_ variable is Type: Text (7). The seven in parenthesis means the max number of available characters is seven. So before you export a table it is good practice to make sure the variables match the variables you intend to join or that the variables will be treated in a manner necessary for additional analyses. 
+
+<p align="center"><img src= "Images/arcgis-table-export.png" alt="Export CSV to DBF" style="width:90%"></p>
+
+The new standalone table should have been added to the Table of Contents. If not you should add it now; the csv table can be removed. Now you can connect the new table to the census tract dataset. Begin by right-clicking on the census data and selecting **Joins and Relates > Add Join**. In the new _Add Join_ window select the following options (your file names may vary):
+
+- Input Table = montco_tracts, or whatever you named the census tract information
+- Input Join Field = NAME
+- Join Table = demo_table, or whatever you named the new demographics data
+- Join Table Field = Tract
+
+For this exercise keep the "Keep All Target Features" button checked and if you receive an warning about an indexing error with the census data you can ignore it for this exercise. Then click the _Validate Join_ button. This will pop-up an new window that will describe the process of checking the two datasets to see if they can be joined. At the bottom of the dialog you should see a line that says there were 39 joins. Close that message and click OK to run the join.
+
+<p align="center"><div class="zoom"><img src= "Images/arcgis-join.png" alt="Join Datasets" style="width:100%"></div></p>
+
+Finally, open the attribute table for the census tracts and scroll to the far right of the table. If the join worked properly you should see a number of additional fields added to the table.
+
+<p align="center"><div class="zoom"><img src= "Images/arcgis-joined-table.png" alt="Join Datasets, Attribute Table" style="width:100%"></div></p>
+
+This will provide all of the data and information you need to visualize the data and make comparisons of the watersheds.
 
 <big><b>Question No. 2</b></big>
 <blockquote>
-_Insert Text Here_
+How many watersheds cover Montgomery County? Although they have been clipped from their original geometry, which watershed is the largest? Which is the smallest?
 </blockquote>
 
 </details>
@@ -204,15 +230,34 @@ _Insert Text Here_
 
 ## Step Three: The Visualization
 
-Blah...blah...blah...
+In this step you will need to examine the spatial distribution of brownfields within the watersheds of Montgomery County and make some qualitative interpretations of potentially impacted urban areas. 
 
 <details><summary><big>View directions in <b> [ArcGIS Pro]{style="color:#ff4500"} </b></span></big></summary>
 
-Blah...blah...blah...
+Examine the spatial distribution of the brownfield throughout the county. The clustering should be relatively apparent and might match up with your knowledge of industrial activities in the various areas of Montgomery County. In order to help quantify the number of brownfields in each watershed you can use a **Spatial join** to create a count variable for this information. To do this, right-click on the _montgomery county watershed_ dataset and go to _Join and Relates > Spatial Join_
+
+<p align="center"><img src= "Images/arcgis-spatial-join.png" alt="Spatial Join Datasets" style="width:85%"></p>
+
+In the resulting window, select the following parameters (your file names may vary):
+
+- Target Features = montgomery county watersheds
+- Join Features = montgomery county brownfields
+- Output Feature Class = This is where you name the new dataset. For continuity you can name it something like: brownfields_per_watershed.shp
+- Join Operation = Choose "Join one to one" from the drop-down menu
+  - Keep all Target Features should remain checked
+Match Option = Choose "Intersect" from the drop-down menu
+
+You can leave the remaining items blank and click OK.
+
+<p align="center"><img src= "Images/arcgis-spatial-join-pane.png" alt="Spatial Join Datasets Dialog" style="width:85%"></p>
+
+ By examining the attribute table for the new dataset you should see a new variable called **Join_Count**. This is the number of brownfields that occur within each watershed.
+ 
+Using the skills you learned in Exercises [Two](https://chrismgentry.github.io/GIS1-Exercise-2/), [Three](https://chrismgentry.github.io/GIS1-Exercise-3/), and [Four](https://chrismgentry.github.io/GIS1-Exercise-4/) you can now make a map that shows Montgomery County, the location of brownfields and watersheds in a graduated color scheme by number of brownfields. Remember to include cartographic elements such as legend, scale bar, north arrow, etc. In this visualization you may also want to add a different basemap or inset map that provides additional supporting information.
 
 <big><b>Question No. 3</b></big>
 <blockquote>
-_Insert Text Here_
+Which watershed contains the most brownfields?
 </blockquote>
 
 </details>
@@ -241,13 +286,18 @@ _Insert Text Here_
 
 </details>
 
-## Step Four: The Proposal
+## Step Four: The County Commisson Report
 
-Blah...blah...blah...
+After discussing the results of the previous analysis with your colleagues at County Commission, Stormwater Management, Health Department, and TDEC, they are interested in seeing how the location of brownfields impacts the community. Although the [commission districts](https://mcgtn.org/storage/departments/commission/maps/DistrictMap.pdf) do not perfectly replicate the census tracts, the County Commissioners and the Health Department want to know if the brownfield sites are directly related to census tracts with large minority populations. They are concerned by a [recently published report](https://www.epa.gov/cleanups/olem-programs-address-contamination-superfund-brownfields-and-rcra-sites-near-60-percent-us) that states:
+
+> "While there is no single way to characterize communities located near our sites, this population is more minority, low income, linguistically isolated, and less likely to have a high school education than the U.S. population as a whole. As a result, these communities may have fewer resources with which to address concerns about their health and environment."
+
+During these discussions the Health Department would also like to know if the areas with a high number of brownfields have higher populations of children.
+
 
 <details><summary><big>View directions in <b> [ArcGIS Pro]{style="color:#ff4500"} </b></span></big></summary>
 
-Blah...blah...blah...
+Using the skills you learned in this and previous exercises, create a new spatial join between the _census tracts_ and _brownfields_ datasets (for this exercise ignore any datum warning). 
 
 <big><b>Question No. 4</b></big>
 <blockquote>
