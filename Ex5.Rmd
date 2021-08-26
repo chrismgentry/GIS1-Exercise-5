@@ -297,11 +297,30 @@ During these discussions the Health Department would also like to know if the ar
 
 <details><summary><big>View directions in <b> [ArcGIS Pro]{style="color:#ff4500"} </b></span></big></summary>
 
-Using the skills you learned in this and previous exercises, create a new spatial join between the _census tracts_ and _brownfields_ datasets (for this exercise ignore any datum warning). 
+Using the skills you learned in this and previous exercises, create a new _spatial join_ between the _census tracts_ and _brownfields_ datasets (for this exercise ignore any datum warning). As with the previous spatial join, you should now have an additional variable labeled "Join_Count" that details the number of brownfields per census tract.
+
+One way you can view two variables at once on a map is to create bivariate symbology.
+
+<p align="center"><img src= "Images/symbology-bivariate-pane.jpg" alt="Bivariate Color Selection" style="width:80%"></p>
+
+This creates a grid of colors with an X and Y axis with the following categories:
+
+<p align="center"><img src= "Images/bivariate-color-scheme.png" alt="Bivariate Color Scheme" style="width:80%"></p>
+
+- Where the Bottom Left cell indicates low values in both variables
+- Where the Upper Left cell indicates high values in the first variable and low values in the second variable
+- Where the Bottom Right cell indicates low values in the first variable and high values in the second variable
+- Where the Upper Right cell indicates high values in the first variable and high values in the second variable
+
+The other grid cells represent midpoints in the variables. The variables can be selected in the _symbology pane_ where "Field 1" is one variable and "Field 2" is the other variable. So to visualize _brownfields_ and one of the population demographics select one for each field. For "Grid Size" select 3x3. You can select your own color scheme with the drop-down menu. In the fields section below, you can rename the fields (e.g. "join count" means nothing so give it an appropriate name).
+
+<p align="center"><img src= "Images/arcgis-bivariate-options.png" alt="Bivariate Color Options" style="width:80%"></p>
+
+With these settings you should have a symbology that shows if a census tract is high or low in either of the particular variables. Test a number of different variable combinations with the count of brownfields and various demographic categories. 
 
 <big><b>Question No. 4</b></big>
 <blockquote>
-_Insert Text Here_
+Which census tract contains the most brownfields?
 </blockquote>
 
 </details>
@@ -332,6 +351,11 @@ _Insert Text Here_
 
 # The Write-Up
 
-Blah...blah...blah...
+In the report you provide to the County Commission, Stormwater Management, Health Department, and TDEC please provide the following information:
+
+- Which watershed is most potentially impacted by brownfields?
+- What is the total population of the tracts with brownfields?
+- What demographic could be the most impacted by brownfields?
+  - By examining the tract with the most brownfields, what demographic is the most impacted, and how does it relate to location within the city/county?
 
 When complete, send a link to your _Colab Notebook_ or word document with answers to Questions 1-4 and your completed map via email.
