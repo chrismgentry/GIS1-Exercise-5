@@ -252,11 +252,31 @@ With the new clipped datasets you can remove or just uncheck (in case you want t
 
 In the final step to prepare the data, you are going to connect a non-spatial data to the census tract dataset. In [Step One](https://chrismgentry.github.io/GIS1-Exercise-5/#11_Step_One:_The_Data) you downloaded a file titled **demographics.csv**. This file contains comma-separated values detailing additional demographic data that you need to append to the census tract data. Although the process is relatively straight-forward, there are a number of steps that need to be taken in order to join the data.
 
-First, if you haven't already, add the _demographics.csv_ file to your table of contents.
+First, you will add the **demographics.csv** using _Layer > Add Layer > Add Delimited Text Layer_ from the menu bar, by clicking the "Add Delimited Layer" button <img src= "Images/qgis-add-csv-button.jpg" alt="Add Delimited Layer" width = "20" height = "20">, or by using the shortcut keys CRTL+Shift+T/CMD+Shift+T.
+
+In the resulting window, use the browse button to find the **demographics.csv** data in your project folder. Be sure that "No geometry (attribute only table)" is selected and the the rest of the information as the default. Click Add.
+
+<p align="center"><div class="zoom"><img src= "Images/qgis-delimited-data.png" alt="Text Delimited Dialog" style="width:100%"></div></p>
+
+The _demographics_ table should now be added to your layers. To connect it to the population information, right/CRTL click on the census tract data and select "properties". In the Properties Menu, select the _Joins_ <img src= "Images/qgis-joins.jpg" alt="Joins Tab" width = "40" height = "20"> tab from the left side menu. At the bottom of the screen click the plus (**+**) symbol to add a join. In the new window select the following parameters:
+
+- Join layer = demographics
+- Join Field = Tract
+- Target field = NAME
+
+Leave the "Cache join layer in memory" checked and scroll down to "Joined Fields". Click all of the fields and scroll down to the "Custom field name prefix" option and check the box. Remove all of the text in the box and then click OK.
+
+<p align="center"><img src= "Images/qgis-vector-join-dialog.png" alt="Vector Join Window" style="width:85%"></p>
+
+Be sure to click OK on the properties window as well to complete the join. Finally, open the attribute table for the census tracts and scroll to the far right of the table. If the join worked properly you should see a number of additional fields added to the table.
+
+<p align="center"><div class="zoom"><img src= "Images/qgis-join-table.png" alt="Join Table" style="width:100%"></div></p>
+
+This will provide all of the data and information you need to visualize the data and make comparisons of the watersheds.
 
 <big><b>Question No. 2</b></big>
 <blockquote>
-_Insert Text Here_
+How many watersheds cover Montgomery County? Although they have been clipped from their original geometry, which watershed is the largest? Which is the smallest?
 </blockquote>
 
 </details>
