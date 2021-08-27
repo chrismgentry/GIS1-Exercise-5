@@ -79,7 +79,7 @@ The datasets used in this exercise will be found on the [Exercise 5](https://git
 <details>
 <summary><big>View Directions in <b> [ArcGIS Pro]{style="color:#ff4500"} </b></big></summary>
 
-As with previous exercises you should begin by launching [ArcGIS Pro]{style="color:#ff4500"}, creating a new blank template, and creating a folder for this specific exercise. You should now see the typical starting screen that greeted you in all of the previous exercises. While some of the data you may already have in previous exercise folders, you will start his lab by downloading a dataset from **TN GIS**. While they maintain a number of quality collections, you will specifically download the _statewide watershed coverage (12 digit Hydrologic Unit Code)_ for Tennessee. This information can be found at the following link: [http://www.tngis.org/water.htm](http://www.tngis.org/water.htm). On that page you will find the link for **"Download Watershed Coverage"**. Click the link, and using the download button <img src= "Images/google-drive-download.jpg" alt="Google Drive Download Button" width = "20" height = "20"> in the upper-right corner, save the _tn_wbd_ zip file to your project folder.
+As with previous exercises you should begin by launching [ArcGIS Pro]{style="color:#ff4500"}, creating a new blank template, and creating a folder for this specific exercise. You should now see the typical starting screen that greeted you in all of the previous exercises. While some of the data for this exercise you may already have in previous exercise folders, you will start this lab by downloading a dataset from **TN GIS**. While they maintain a number of quality collections, you will specifically download the _statewide watershed coverage (12 digit Hydrologic Unit Code)_ for Tennessee. This information can be found at the following link: [http://www.tngis.org/water.htm](http://www.tngis.org/water.htm). On that page you will find the link for **"Download Watershed Coverage"**. Click the link, and using the download button <img src= "Images/google-drive-download.jpg" alt="Google Drive Download Button" width = "20" height = "20"> in the upper-right corner, save the _tn_wbd_ zip file to your project folder.
 
 <p align="center"><img src= "Images/tngis-website.png" alt="TN GIS Water Data Download" style="width:100%"></p>
 
@@ -119,11 +119,34 @@ What is the common name of the extracted files? How many are there? What are the
 <details>
 <summary><big>View directions in <b> [QGIS]{style="color: #006400"} </b></big></summary>
 
-Blah...blah...blah...
+As with previous exercises you should begin by launching [QGIS]{style="color: #006400"}, creating a new empty project, and creating a project folder for this specific exercise. You should now see the typical starting screen that greeted you in all of the previous exercises. While some of the data for this exercise you may already have in previous exercise folders, you will start this lab by downloading a dataset from **TN GIS**. While they maintain a number of quality collections, you will specifically download the _statewide watershed coverage (12 digit Hydrologic Unit Code)_ for Tennessee. This information can be found at the following link: [http://www.tngis.org/water.htm](http://www.tngis.org/water.htm). On that page you will find the link for **"Download Watershed Coverage"**. Click the link, and using the download button <img src= "Images/google-drive-download.jpg" alt="Google Drive Download Button" width = "20" height = "20"> in the upper-right corner, save the _tn_wbd_ zip file to your project folder.
 
-<big><b>Question No. 1</b></big>
+<p align="center"><img src= "Images/tngis-website.png" alt="TN GIS Water Data Download" style="width:100%"></p>
+
+Once you have downloaded the file, navigate to the saved location to unzip the file. Within the unzipped folder you will find three additional folders titled:
+
+- tn_8dig_huc
+- tn_12dig_huc
+- tn_250k_huc
+
+These are watershed files at varying levels of detail. For hydrologic units you are looking for one with the largest number of digits to get the largest scale data. So for this exercise you will unzip the **tn_12dig_huc** dataset.
+
+<p align="center"><img src= "Images/second-unzip.jpg" alt="tn_12dig_huc.zip extract" style="width:100%"></p>
+
+Finally, with that final folder extracted you will find a folder titled _hydrologic_units_ that will contain a shapefile named **wbdhu12_a_tn.shp** that will be used in this exercise. This is the polygon file representing the 12 digit hydrologic unit codes for the entire state of Tennessee.
+
+Next, you will need the _tornado_data_ file from Exercise 2 and the _census_tracts_ data from Exercise 3. You have a few options for obtaining this data. You can download the data again (but this time to the new project folder), you can navigate to the Exercise 2 and Exercise 3 project folders, respectively, on your computer and copy the zip files to the Exercise 5 project folder, or you can copy the data over using the _browser window_ in [QGIS]{style="color: #006400"}. While the first two options are relatively straight forward, it is important to be confident navigating and using the browser in QGIS.
+
+If you created a "favorites" folder you will most likely navigate within that location, however, if you haven't created a favorite folder you will search through your drives for the _tornado_data_ file from Exercise 2. Once you locate the file, right/CRTL click on the file and select **Export Layer > To File...**. In the resulting window select _ESRI Shapefile_ as the "Format", for the "File name" click on the browse button <img src= "Images/qgis-file-location-button.jpg" alt="Browse Location Button" width = "20" height = "20"> and give it a file name and save it to your Exercise 5 project folder. If you check the "Add Saved File to Map" button and click OK the file will be added to your layers. 
+
+<p align="center"><div class="zoom"><img src= "Images/qgis-browser.png" alt="Export file from Browser" style="width:100%"></div></p>
+
+Repeat this process for the _census_tracts_ data from Exercise 3. While you could add data directly from the other folders, the best practice might be to export the data from one project to another. If for example you plan to alter the data then using it directly from the previous folder would alter it there as well. This could cause future issues when returning to that project. With these two files added to your layers you only need to download the **Brownfields** and **Demographics** data from the [Exercise 5, GitHub Data](https://github.com/chrismgentry/GIS1-Exercise-5/tree/main/Data) page. Save both in your Exercise 5 project folder and unzip the **brownfields.zip** file to access the dataset.
+
+<big><b>Question No. 1</b></big><br>
+Using **File Explorer/Finder**, examine the dataset contained in the _brownfields.zip_ file and answer the following question:
 <blockquote>
-_Insert Text Here_
+What is the common name of the extracted files? How many are there? What are the various file extensions?
 </blockquote>
 
 </details>
@@ -206,7 +229,30 @@ How many watersheds cover Montgomery County? Although they have been clipped fro
 <details>
 <summary><big>View Directions in <b> [QGIS]{style="color:#006400"} </b></big></summary>
 
-Blah...blah...blah...
+With the data collected you can now add the _brownfields_, census tracts, _tornado_data_, and _wbdhu12_a_tn_ (watersheds) data to your project. Although there are a number of ways of isolating data to make derived datasets (e.g. Select Features > Select Features by Freehand in [Exercise 4, Step 1](https://chrismgentry.github.io/GIS1-Exercise-4/#11_Step_One:_The_Data)), in this exercise you will use another tool from **Vector Selection** in the _Processing Toolbox_ to complete this task.
+
+<p align="center"><div class="zoom"><img src= "Images/qgis-ex5-data.png" alt="Vector Selection" style="width:100%"></div></p>
+
+With this tool you will select only a small portion of the data you need for further analysis. To do this, double-click the "Select"Extract by Attribute" tool and in the resulting window input the following parameters (file names may vary):
+
+- Input layer = tornado_data
+- Selection attribute = NAME
+- Operator = = (equals sign)
+- Value = Montgomery
+
+Remember that in [QGIS]{style="color:#006400"} you have the ability to either create permanent files or temporary layers. Because you will only be using the Montgomery County dataset to clip files later on, you can decide whether to use the browse button <img src= "Images/qgis-file-location-button.jpg" alt="Browse Location Button" width = "20" height = "20"> to save the file for future use or just create a temporary file.
+
+<p align="center"><img src= "Images/qgis-extract-by-attribute.png" alt="Select by Attribute" style="width:85%"></p>
+
+This will add the new **montgomery_county** temporary file (or shapefile if saved) to your layers. You can now remove the tornado dataset because it will no longer be needed. You may also consider renaming it if necessary. With the polygon of Montgomery County available you can now use the **Clip** tool like in [Exercise 4, Step One](https://chrismgentry.github.io/GIS1-Exercise-4/#11_Step_One:_The_Data) to clip the _brownfields_ and _watersheds_ datasets to reduce them to only those within Montgomery County. Recall that the _Input layer_ is the data you want to reduce (e.g. brownfields or watersheds), the _Overlay layer_ is the data you want it to take the shape of. Refer back to [Exercise 4, Step One](https://chrismgentry.github.io/GIS1-Exercise-4/#11_Step_One:_The_Data) for more information about Clip. You should go ahead and use the browse button <img src= "Images/qgis-file-location-button.jpg" alt="Browse Location Button" width = "20" height = "20"> to save these as permanent files. Be sure to use a naming convention that will allow you to recal what the files are later on (e.g. montco_brownfields).
+
+With the new clipped datasets you can remove or just uncheck (in case you want to use them in your final map) the full _brownfields_ and _watersheds_ datasets to reduce clutter. You can also now zoom in closer to view only Montgomery County.
+
+<p align="center"><div class="zoom"><img src= "Images/qgis-montco-data.png" alt="Montgomery County Datasets" style="width:100%"></div></p>
+
+In the final step to prepare the data, you are going to connect a non-spatial data to the census tract dataset. In [Step One](https://chrismgentry.github.io/GIS1-Exercise-5/#11_Step_One:_The_Data) you downloaded a file titled **demographics.csv**. This file contains comma-separated values detailing additional demographic data that you need to append to the census tract data. Although the process is relatively straight-forward, there are a number of steps that need to be taken in order to join the data.
+
+First, if you haven't already, add the _demographics.csv_ file to your table of contents.
 
 <big><b>Question No. 2</b></big>
 <blockquote>
