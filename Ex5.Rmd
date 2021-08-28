@@ -317,7 +317,7 @@ You can leave the remaining items blank and click OK.
 
 <p align="center"><img src= "Images/arcgis-spatial-join-pane.png" alt="Spatial Join Datasets Dialog" style="width:85%"></p>
 
- By examining the attribute table for the new dataset you should see a new variable called **Join_Count**. This is the number of brownfields that occur within each watershed.
+By examining the attribute table for the new dataset you should see a new variable called **Join_Count**. This is the number of brownfields that occur within each watershed.
  
 Using the skills you learned in Exercises [Two](https://chrismgentry.github.io/GIS1-Exercise-2/), [Three](https://chrismgentry.github.io/GIS1-Exercise-3/), and [Four](https://chrismgentry.github.io/GIS1-Exercise-4/) you can now make a map that shows Montgomery County, the location of brownfields and watersheds in a graduated color scheme by number of brownfields. Remember to include cartographic elements such as legend, scale bar, north arrow, etc. In this visualization you may also want to add a different basemap or inset map that provides additional supporting information.
 
@@ -331,11 +331,30 @@ Which watershed contains the most brownfields?
 
 <details><summary><big>View directions in <b> [QGIS]{style="color:#006400"} </b></span></big></summary>
 
-Blah...blah...blah...
+Examine the spatial distribution of the brownfield throughout the county. The clustering should be relatively apparent and might match up with your knowledge of industrial activities in the various areas of Montgomery County. In order to help quantify the number of brownfields in each watershed you can use **Join attributes by location (Summary)** from the _Vector General_ menu in the Processing Toolbox. this will create a count of the total number of brownfields per watershed polygon. In the _Join attributes by location (Summary)_ select the following options (layer names may vary):
+
+- Input layer = watershed layer for Montgomery County
+- Join layer = brownfields layer for Montgomer County
+- Geometric predicate = Intersects
+
+In the _Summaries to calculate..._ you will click the browse button and select only "count". When selected, click the blue arrow button <img src= "Images/qgis-blue-arrow.jpg" alt="blue Arrow" width = "20" height = "20"> to return to the previous page. As before, you can leave this as a temporary file\* or you can choose to create a permanent file for future use. Now click Run.
+
+<p align="center"><div class="zoom"><img src= "Images/qgis-spatial-join.png" alt="Spatial Join Datasets Dialog" style="width:100%"></div></p>
+\*If you choose to make a temporary file you should rename it in the layers with a sensible name.
+
+By examining the attribute table for the new dataset you should see a new variable called **Name_count**. This is the number of brownfields that occur within each watershed. Unfortunately, some of the cells are populated with "Null" values. You need to remove these in order to create a proper graduated color scheme. To do this you will open the attribute table for newly created dataset and click the _Field calculator_ button <img src= "Images/qgis-field-calculator-button.jpg" alt="Field Calculator button" width = "20" height = "20">. In the new window uncheck the box for "Create a new field" and check the box for "Update existing field". In the drop-down menu below the box select _Name_count_. In the Expression box type the following and click OK:
+
+```if("Name_count" is null, 0, "Name_count")```
+
+<p align="center"><div class="zoom"><img src= "Images/qgis-field-calculator.png" alt="Field Calculator" style="width:100%"></div></p>
+
+This will replace all of the null values with zero values. Finally, click the _Toggle editing mode_ button <img src= "Images/qgis-editor-button.jpg" alt="toggle Editing" width = "20" height = "20"> and save the changes to the table.
+
+Now, using the skills you learned in Exercises [Two](https://chrismgentry.github.io/GIS1-Exercise-2/), [Three](https://chrismgentry.github.io/GIS1-Exercise-3/), and [Four](https://chrismgentry.github.io/GIS1-Exercise-4/) you can now make a map that shows Montgomery County, the location of brownfields and watersheds in a graduated color scheme by number of brownfields. Remember to include cartographic elements such as legend, scale bar, north arrow, etc. In this visualization you may also want to add a different basemap or inset map that provides additional supporting information.
 
 <big><b>Question No. 3</b></big>
 <blockquote>
-_Insert Text Here_
+Which watershed contains the most brownfields?
 </blockquote>
 
 </details>
@@ -367,11 +386,11 @@ Using the skills you learned in this and previous exercises, create a new _spati
 
 One way you can view two variables at once on a map is to create bivariate symbology.
 
-<p align="center"><img src= "Images/symbology-bivariate-pane.jpg" alt="Bivariate Color Selection" style="width:80%"></p>
+<p align="center"><img src= "Images/symbology-bivariate-pane.jpg" alt="Bivariate Color Selection" style="width:65%"></p>
 
 This creates a grid of colors with an X and Y axis with the following categories:
 
-<p align="center"><img src= "Images/bivariate-color-scheme.png" alt="Bivariate Color Scheme" style="width:80%"></p>
+<p align="center"><img src= "Images/bivariate-color-scheme.png" alt="Bivariate Color Scheme" style="width:65%"></p>
 
 - Where the Bottom Left cell indicates low values in both variables
 - Where the Upper Left cell indicates high values in the first variable and low values in the second variable
@@ -380,7 +399,7 @@ This creates a grid of colors with an X and Y axis with the following categories
 
 The other grid cells represent midpoints in the variables. The variables can be selected in the _symbology pane_ where "Field 1" is one variable and "Field 2" is the other variable. So to visualize _brownfields_ and one of the population demographics select one for each field. For "Grid Size" select 3x3. You can select your own color scheme with the drop-down menu. In the fields section below, you can rename the fields (e.g. "join count" means nothing so give it an appropriate name).
 
-<p align="center"><img src= "Images/arcgis-bivariate-options.png" alt="Bivariate Color Options" style="width:80%"></p>
+<p align="center"><img src= "Images/arcgis-bivariate-options.png" alt="Bivariate Color Options" style="width:65%"></p>
 
 With these settings you should have a symbology that shows if a census tract is high or low in either of the particular variables. Test a number of different variable combinations with the count of brownfields and various demographic categories. 
 
@@ -394,11 +413,64 @@ Which census tract contains the most brownfields?
 
 <details><summary><big>View directions in <b> [QGIS]{style="color:#006400"} </b></span></big></summary>
 
-Blah...blah...blah...
+Using the skills you learned in this and previous exercises, create a new _Join attributes by location (Summary)_ between the _census tracts_ and _brownfields_ datasets (for this exercise ignore any datum warning). As with the previous spatial join, you should now have an additional variable labeled "Name_count" that details the number of brownfields per census tract.
+
+One way you can view two variables at once on a map is to create bivariate symbology.This creates a grid of colors with an X and Y axis with the following categories:
+
+<p align="center"><img src= "Images/bivariate-color-scheme.png" alt="Bivariate Color Scheme" style="width:65%"></p>
+
+- Where the Bottom Left cell indicates low values in both variables
+- Where the Upper Left cell indicates high values in the first variable and low values in the second variable
+- Where the Bottom Right cell indicates low values in the first variable and high values in the second variable
+- Where the Upper Right cell indicates high values in the first variable and high values in the second variable
+
+The other grid cells represent midpoints in the variables. You can create these bivariate maps in QGIS with some editing of the individual color palettes in your graduate colors map and by using a plug-in to create the legend. In order to create the map you first need to duplicate your layer. This example will use the watershed dataset with the "Name_count" variable for number of brownfields. You should be using the census layer that contains the brownfield count you made in the first part of this section. To duplicate a layer, right/CRTL click on a layer and select **Duplicate Layer**. If it helps you to keep the two layers organized, you can amend their layer name to include the variable used for the graduated colors (e.g. watersheds_brownfields_count or watersheds_brownfields_acres). Otherwise just before you remember what each one is displaying.
+
+Next, you will need to create a graduated symbology for each layer with three (3) categories and a specific color palette. Because bivariate maps blend two color schemes it is important to have the appropriate color selection. Here is an example of several bivariate color palettes from [Joshua Stevens](https://www.joshuastevens.net/cartography/make-a-bivariate-choropleth-map/)
+
+<p align="center"><div class="zoom"><img src= "Images/bivariate-color-palettes.png" alt="Bivariate Color Palettes" style="width:100%"></div></p>
+
+This example will use the second color palette. There are a few steps required to match your graduated colors categories to the color palettes on the X and Y axes in the image above:
+
+  1. Select the appropriate _value_. Acres will be used for this example.
+  2. Set the classes to 3.
+  3. Double-click on the first of the selected colors.
+  4. In the new _Symbol Selector_ window, click on the color bar.
+  5. In the next _Select Color_ window, type in the HTML notation that matches your selected palette. Remember, one of your layers will start at the bottom left and work up and the other will start and the bottom left and work to the right.
+
+Finally, click OK on the windows in Steps 3 and 4 and repeat the process for the next color moving progressively up or right on the selected bivariate palette depending on the layer. This process will need to be completed for both of the two layers you will use in your bivariate map.
+
+<p align="center"><div class="zoom"><img src= "Images/qgis-customize-color-steps.png" alt="Bivariate Color Palette Steps" style="width:100%"></div></p>
+
+Once you have completed this process for each of the layers you should return to the properties menu of the first layer and under the _Symbology_ tab scroll down to _Layer Rendering_ and expand the options to see the options for **Blending mode**. Choose _multiply_ for the layer, and _normal_ for the feature and click OK.
+
+<p align="center"><div class="zoom"><img src= "Images/qgis-layer-rendering.jpg" alt="Layer Rendering" style="width:100%"></div></p>
+
+With both layers viewable you should now have a bivariate color palette for the data.
+
+<p align="center"><div class="zoom"><img src= "Images/qgis-bivariate-map.png" alt="Bivariate Map" style="width:100%"></div></p>
+
+Because QGIS is unable to interpret the appropriate legend style from the available data you need to add a plug-in. Click **Plugins > Manage and Install Plugins** from the menu bar. 
+
+<p align="center"><img src= "Images/qgis-manage-plugins.png" alt="Install and Manage Plugins" style="width:100%"></p>
+
+Next, search for "Bivariate Legend" in the search bar. Be sure _All_ is selected in the left side column. This should bring up the *Bivariate Legend* plugin. Click _Install Plugin_ in the lower right of the window to install the legend generator.
+
+<p align="center"><div class="zoom"><img src= "Images/qgis-bivariate-legend-plugin.png" alt="Install Bivariate Legend Plugin" style="width:100%"></div></p>
+
+With the plugin installed you can return to your project. You will now have a _Bivariate Legend_ button <img src= "Images/qgis-bivariate-plugin-button.jpg" alt="Bivariate Legend button" width = "20" height = "20"> on your toolbar. Click the button to open the legend generator. Select the appropriate _Top layer_ from the drop-down menu and click the box for Reverse colors. Select the appropriate _Bottom layer_, set the _Square width_ to 48, and choose _Multiply_ for the drop-down menu below. Then click _Generate legend_.
+
+<p align="center"><img src= "Images/qgis-bivariate-legend-generator.png" alt="Bivariate Legend Generator" style="width:85%"></p>
+
+Finally, click **Export legend to image** and save it in your project folder with a **.png** extension. In your layout, use the _Add image_ button <img src= "Images/qgis-add-image-button-layout.jpg" alt="Add image to layout button" width = "20" height = "20"> and draw the image box while holding the shift key to constrain the box to a perfect square. Next, right-click in the box and go to _Item properties_ to locate the image file. In the properties pane, select _Raster Image_ and navigate to your project folder to add the image. Remember that this is now simply an image which means you will need to manually create the legend using the image and inserted text. Here is an example of one that could be used for the legend created above.
+
+<p align="center"><img src= "Images/qgis-sample bivariate-legend.png" alt="Bivariate Legend Example" style="width:50%"></p>
+
+You should experiment with different demographics to see how they relate to the number of brownfields before completing the assignment. You will want to select the variable that you believe shows which demographic would most be impacted by the presence of brownfields in the various tracts.
 
 <big><b>Question No. 4</b></big>
 <blockquote>
-_Insert Text Here_
+Which census tract contains the most brownfields?
 </blockquote>
 
 </details>
