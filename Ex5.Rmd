@@ -462,7 +462,11 @@ With the plugin installed you can return to your project. You will now have a _B
 
 <p align="center"><img src= "Images/qgis-bivariate-legend-generator.png" alt="Bivariate Legend Generator" style="width:85%"></p>
 
-Finally, click **Export legend to image** and save it in your project folder with a **.png** extension. In your layout, use the _Add image_ button <img src= "Images/qgis-add-image-button-layout.jpg" alt="Add image to layout button" width = "20" height = "20"> and draw the image box while holding the shift key to constrain the box to a perfect square. Next, right-click in the box and go to _Item properties_ to locate the image file. In the properties pane, select _Raster Image_ and navigate to your project folder to add the image. Remember that this is now simply an image which means you will need to manually create the legend using the image and inserted text. Here is an example of one that could be used for the legend created above.
+Finally, click **Export legend to image** and save it in your project folder with a **.png** extension. In your layout, use the _Add image_ button <img src= "Images/qgis-add-image-button-layout.jpg" alt="Add image to layout button" width = "20" height = "20"> and draw the image box while holding the shift key to constrain the box to a perfect square. Next, right-click in the box and go to _Item properties_ to locate the image file. In the properties pane, select _Raster Image_ and navigate to your project folder to add the image. 
+
+<p align="center"><div class="zoom"><img src= "Images/qgis-insert-image-legend.png" alt="INsert Legend Image" style="width:100%"></div></p>
+
+Remember that this is now simply an image which means you will need to manually create the legend using the image and inserted text. Be sure you remember which data belongs on which axis and think about how you want the reader to interpret the information. Here is an example of one that could be used for the legend created above.
 
 <p align="center"><img src= "Images/qgis-sample bivariate-legend.png" alt="Bivariate Legend Example" style="width:50%"></p>
 
