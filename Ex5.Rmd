@@ -153,13 +153,125 @@ What is the common name of the extracted files? How many are there? What are the
 <hr></hr>
 
 <details><summary><big>View directions in <b> [R]{style="color: #6495ED"} </b></span></big></summary>
-Before you begin, you will need to open the [Ex2 Colab Notebook](https://github.com/chrismgentry/GIS1-Exercise-5/blob/main/GIS1_EX5.ipynb) and insert **tocolab** after _github_ in the URL to open in the _Colab Environment_. As you have seen before, R requires various packages to complete certain analyses. In this exercise you will be using **tidyverse, OpenStreetMaps, ggfortify, maptools, and rgeos**. To install and load the packages we will use the following script:
+Before you begin, you will need to open the [Ex5 Colab Notebook](https://github.com/chrismgentry/GIS1-Exercise-5/blob/main/GIS1_EX5.ipynb) and insert **tocolab** after _github_ in the URL to open in the _Colab Environment_. As you have seen before, [R]{style="color: #6495ED"} requires various packages to complete certain analyses. In this exercise you will be using a large number of packages including: **googledrive, tidyverse, ggsn, cowplot, maps, mapproj, raster, rgeos, rgdal, sp, sf, biscale**. Each of these packages also contain various dependencies so it will take a while to load. In previous exercises you installed and loaded packages individually. This requires two lines of code for each package. Therefore this exercise would begin with twenty-four lines to install and load the necessary packages. So in this exercise you will learn to install and load the packages in a three line script. The first line lists the packages, the second line installs all packages, and the third line loads them. In later exercises you will learn to use a library management package to check for libraries on your computer, install them if necessary, and load the packages necessary for the project. For this exercise you will use the following script:
 
-Blah...blah...blah...
+```{r load packages, message=FALSE, warning=FALSE, echo = TRUE}
+packages<-c('googledrive','tidyverse','ggsn','cowplot','maps','mapproj',
+            'raster','rgeos','rgdal','sp','sf','biscale')
+sapply(packages, install.packages, character.only = TRUE)
+sapply(packages, require, character.only = TRUE)
+```
 
-<big><b>Question No. 1</b></big>
+As with [Exercise 3](https://chrismgentry.github.io/GIS1-Exercise-3/) the `tigris` package needs to be loaded separately from other packages with the following script:
+
+```{r load tigris, message=FALSE, warning=FALSE, echo=TRUE}
+devtools::install_github('walkerke/tigris')
+library('tigris')
+```
+
+The datasets needed for this exercise include: census tracts from [Exercise 3](https://github.com/chrismgentry/GIS1-Exercise-3/tree/main/Data), watersheds data from [TN GIS](http://www.tngis.org/water.htm), brownfields information and demographics data from this [exercise](https://github.com/chrismgentry/GIS1-Exercise-5/tree/main/Data). As with previous exercises all of the data for this lab will be able to be downloaded direct from either a [GitHub Page](https://github.com/chrismgentry/GIS1-Exercise-5) or from a public website. The data from the TN GIS is stored in a Google Drive folder. Most cloud storage platforms have unique data structure that require more detailed download information than a simple \*.csv being stored on a webpage. So to download a file from Google Drive you will use the `googledrive` package that was installed in the list of packages above.
+
+To avoid connecting your own Google credientials you will begin by using the `drive_deauth` function which suspends authorization credentials. Depending on your use of Google Drive within R you may need to provide your login credentials or an access token. If you navigate to [http://www.tngis.org/water.htm](http://www.tngis.org/water.htm) you will find the link for **"Download Watershed Coverage"**. 
+
+<p align="center"><img src= "Images/tngis-website.png" alt="TN GIS Water Data Download" style="width:100%"></p>
+
+By clicking the link, a new window will open with a Google Drive download page. On this screen you can locate the _file ID_ within the URL.
+
+<p align="center"><img src= "Images/google-drive-link.png" alt="Google Drive Download Link" style="width:100%"></p>
+
+This ID will be used in the `drive_downloads` function to obtain the file.
+
+```{r google drive download, message=FALSE, warning=FALSE, echo=TRUE}
+drive_deauth()
+drive_download(as_id("0B9UIdGiB_LXOeVVQNm91bGpvUUE"), overwrite = TRUE)
+```
+
+On the Google Colaboratory page you will see a folder button <img src= "Images/google-colab-files-button.jpg" alt="Google Colab Files Button" width="20" height="20"> on the left that opens a new pane on the left of the screen. The "directory" for this location is `/content/` which can be directly accessed within Colab. 
+
+<p align="center"><img src= "Images/colab-files-tab.png" alt="Colab Files Tab" style="width:100%"></p>
+
+The script above downloaded the **tn_wbd.zip** file that is now located in the contents folder. You can use the `unzip` function to extract the necessary data.
+
+```{r unzip 1, message=FALSE, warning=FALSE, echo=TRUE}
+unzip('tn_wbd.zip')
+```
+
+In the folders pane you can see three additional files were extracted. These are watershed files at varying levels of detail. For hydrologic units the file option with the largest number of digits (e.g. 8-digit Huc vs 12-digit HUC) provides the largest scale data. So for this exercise you will unzip the **tn_12dig_huc.zip** dataset. In order to help organize the data, you will add a _exdir =_ call to the script to create a new folder for the data within the contents folder. Because this exercise is specific to Colab the scripts below will differ if you are using different IDE for R.
+
+```{r unzip 2, message=FALSE, warning=FALSE, echo=TRUE}
+unzip('tn_12dig_huc.zip', exdir = "/content/watersheds")
+```
+
+Now you can open the watersheds folder and view the contents. Due to the file structure of the zip file, the uncompressed data now contains the characters **hydrologic_units\\** in front of the file name. [R]{style="color: #6495ED"} will not permit these characters within a file or object therefore you need to rename the data before you can continue.
+
+<p align="center"><div class="zoom"><img src= "Images/colab-file-names.png" alt="Inaccessible File Names" style="width:100%"></div></p>
+
+To start this process you will create a list of files in the _watershed_ folder that contains the "hydrologic_units" prefix. Since we need to consistently remove the first seventeen characters, you can use the `sub` function to remove those characters. Alternatively if you just needed to rename some files you could add characters between the apostrophes.
+
+```{r list file names, message=FALSE, warning=FALSE, echo=TRUE}
+names <- list.files(path = "/content/watersheds", pattern = "hydrologic_units")
+new_names <- sub('.................','',names)
+```
+
+Because `file.rename` operates at the root directory level, you need to temporarily direct the working directory to the location of the inappropriately named files, rename them, then return to the correct working directory. It is possible there is a way around this, unfortunately via Colab or RStudio I do not know how to use `file.name` outside of the directory containing the values.
+
+```{r rename files, message=FALSE, warning=FALSE, echo=TRUE}
+setwd("/content/watersheds")
+file.rename(names,new_names)
+setwd("/content")
+```
+
+If you navigate back to the files pane you can now see the watershed files have been renamed. To return to the content folder you can use the _up directory_ button <img src= "Images/colab-files-up-button.jpg" alt="Google Colab Up Directory Button" width="20" height="20">.
+
+<p align="center"><div class="zoom"><img src= "Images/colab-new-names.png" alt="Renamed File" style="width:100%"></div></p>
+
+Now you can use the `readOGR` function from `rgeos` to rad in the shapefile to a new object.
+
+```{r read in watersheds, message=FALSE, warning=FALSE, echo=TRUE}
+watersheds_data <- readOGR("/content/watersheds/wbdhu12_a_tn.shp")
+```
+
+With the watersheds dataset created you need to address the remaining datasets. Using similar steps to previous exercises you will now download and create a brownfields dataset. You will also create a new folder for this data just like in the watershed script above.
+
+```{r read in brownfields, message=FALSE, warning=FALSE, echo=TRUE}
+download.file('https://github.com/chrismgentry/GIS1-Exercise-5/raw/main/Data/brownfields.zip', 'brownfields.zip')
+unzip('brownfields.zip', exdir = "/content/brownfields")
+brownfields_data <- readOGR("/content/brownfields/brownfields.shp")
+```
+
+The next dataset to import will be the [demographics](https://github.com/chrismgentry/GIS1-Exercise-5/blob/main/Data/demographics.csv) dataset from the exercise GitHub page. Because the data is a simple \*.csv file it can easily be read in with the `read.csv` function.
+
+```{r read in demographics, message=FALSE, warning=FALSE, echo=TRUE}
+demographics <- read.csv('https://raw.githubusercontent.com/chrismgentry/GIS1-Exercise-5/main/Data/demographics.csv')
+```
+
+The final dataset to import is the census tract for Montgomery County. Using the `tigris` package like in [Exercise 3, Step 1](https://chrismgentry.github.io/GIS1-Exercise-3/#11_Step_One:_The_Data) you can use `tracts` to obtain the dataset.
+
+```{r read in census tracts, message=FALSE, warning=FALSE, echo=TRUE}
+montco_tracts <- tracts("TN", county = "Montgomery")
+```
+
+Three of these datasets (brownfields, watersheds, and census tracts) are already in spatial data formats. In order to perform further analysis you need to make sure they have the same coordinate reference system (crs).
+
+```{r check crs, message=FALSE, warning=FALSE, echo=TRUE}
+crs(watersheds_data)
+crs(brownfields_data)
+crs(montco_tracts)
+```
+
+You can see they are all in different projections. Therefore you need to reproject them under a single crs. For this exercise you will use **EPSG:4326** which in R appears as _+proj=longlat +datum=WGS84 +no_defs_ when referenced in the script. Because the brownfields data is already in this crs you can use it or the EPSG to correct the other datasets. Remember from _Exercise 3_ that data from `tigris` is in a slightly different spatial data structure (_sf_ vs. _SpatialPolygonsDataFrame_) so the process to reproject that data will vary from the watersheds dataset.
+
+```{r reproject data, message=FALSE, warning=FALSE, echo=TRUE}
+watersheds_data <- spTransform(watersheds_data, crs(brownfields_data))
+montco_tracts <- st_transform(montco_tracts, 4326)
+```
+
+You can now check the crs information for each dataset and they should all be in EPSG:4326 (or +proj=longlat +datum=WGS84 +no_defs). With the data created and reprojected to the same crs you can move on to the analysis.
+
+<big><b>Question No. 1</b></big><br>
+Using the files button on the left, examine the dataset contained in the brownfields.zip file and answer the following question:
 <blockquote>
-_Insert Text Here_
+What is the common name of the extracted files? How many are there? What are the various file extensions?
 </blockquote>
 
 </details>
