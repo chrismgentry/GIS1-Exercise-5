@@ -148,6 +148,7 @@ Using **File Explorer/Finder**, examine the dataset contained in the _brownfield
 <blockquote>
 What is the common name of the extracted files? How many are there? What are the various file extensions?
 </blockquote>
+<small>The library of Congress has a great description of the various extensions [here](https://www.loc.gov/preservation/digital/formats/fdd/fdd000280.shtml).</small>
 
 </details>
 <hr></hr>
@@ -273,6 +274,7 @@ Using the files button on the left, examine the dataset contained in the brownfi
 <blockquote>
 What is the common name of the extracted files? How many are there? What are the various file extensions?
 </blockquote>
+<small>The library of Congress has a great description of the various extensions [here](https://www.loc.gov/preservation/digital/formats/fdd/fdd000280.shtml).</small>
 
 </details>
 
