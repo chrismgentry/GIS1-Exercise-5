@@ -555,7 +555,7 @@ Which watershed contains the most brownfields?
 
 <details><summary><big>View directions in <b> [R]{style="color:#6495ED"} </b></span></big></summary>
 
-Examine the spatial distribution of the brownfield throughout the county. The clustering should be relatively apparent and might match up with your knowledge of industrial activities in the various areas of Montgomery County. Use the skills you developed in Exercises [4](https://chrismgentry.github.io/GIS1-Exercise-4/#13_Step_Three:_The_Visualization), [3](https://chrismgentry.github.io/GIS1-Exercise-3/#13_Step_Three:_The_Visualization), and [2](https://chrismgentry.github.io/GIS1-Exercise-2/) to finish the scripts below and create the visualizations for the number of brownfields per watershed and the number of brownfields per census tract. Don't forget to add all of the necessary map elements and feel free to add any ancillary data from this or previous exercises that enhance your map.
+Examine the spatial distribution of the brownfield throughout the county. The clustering should be relatively apparent and might match up with your knowledge of industrial activities in the various areas of Montgomery County. Use the skills you developed in Exercises [4](https://chrismgentry.github.io/GIS1-Exercise-4/#13_Step_Three:_The_Visualization), [3](https://chrismgentry.github.io/GIS1-Exercise-3/#13_Step_Three:_The_Visualization), and [2](https://chrismgentry.github.io/GIS1-Exercise-2/) to **_complete_** the scripts below and create the visualizations for the number of brownfields per watershed and the number of brownfields per census tract. Don't forget to add all of the necessary map elements and feel free to add any ancillary data from this or previous exercises that enhance your map.
 
 Watershed Map:
 ```{r watershed visualization, message=FALSE, warning=FALSE, echo=TRUE}
@@ -629,7 +629,7 @@ Which census tract contains the most brownfields?
 
 Using the skills you learned in this and previous exercises, create a new _Join attributes by location (Summary)_ between the _census tracts_ and _brownfields_ datasets (for this exercise ignore any datum warning). As with the previous spatial join, you should now have an additional variable labeled "Name_count" that details the number of brownfields per census tract.
 
-One way you can view two variables at once on a map is to create bivariate symbology.This creates a grid of colors with an X and Y axis with the following categories:
+One way you can view two variables at once on a map is to create bivariate symbology. This creates a grid of colors with an X and Y axis with the following categories:
 
 <p align="center"><img src= "Images/bivariate-color-scheme.png" alt="Bivariate Color Scheme" style="width:65%"></p>
 
@@ -678,7 +678,7 @@ With the plugin installed you can return to your project. You will now have a _B
 
 Finally, click **Export legend to image** and save it in your project folder with a **.png** extension. In your layout, use the _Add image_ button <img src= "Images/qgis-add-image-button-layout.jpg" alt="Add image to layout button" width = "20" height = "20"> and draw the image box while holding the shift key to constrain the box to a perfect square. Next, right-click in the box and go to _Item properties_ to locate the image file. In the properties pane, select _Raster Image_ and navigate to your project folder to add the image. 
 
-<p align="center"><div class="zoom"><img src= "Images/qgis-insert-image-legend.png" alt="INsert Legend Image" style="width:100%"></div></p>
+<p align="center"><div class="zoom"><img src= "Images/qgis-insert-image-legend.png" alt="Insert Legend Image" style="width:100%"></div></p>
 
 Remember that this is now simply an image which means you will need to manually create the legend using the image and inserted text. Be sure you remember which data belongs on which axis and think about how you want the reader to interpret the information. Here is an example of one that could be used for the legend created above.
 
@@ -696,11 +696,75 @@ Which census tract contains the most brownfields?
 
 <details><summary><big>View directions in <b> [R]{style="color:#6495ED"} </b></span></big></summary>
 
-Blah...blah...blah...
+As stated above, the County Commissioners and the Health Department want to see the relationship between census tracts with large minority populations and brownfields and the Health Department would also like to see the relationship between brownfields juvenile populations. The visualizations you created above simply show the number of brownfields per watershed/census tract. You could create a qualitative visualization where demographics (either minority class or age class) is used as the fill with brownfield locations as an overlay. However, you can also create a two variable quantitative map called a bivariate map that displays quantitative categories for two different variables. This creates a grid of colors with an X and Y axis with the following categories:
+
+<p align="center"><img src= "Images/bivariate-color-scheme.png" alt="Bivariate Color Scheme" style="width:65%"></p>
+
+- Where the Bottom Left cell indicates low values in both variables
+- Where the Upper Left cell indicates high values in the first variable and low values in the second variable
+- Where the Bottom Right cell indicates low values in the first variable and high values in the second variable
+- Where the Upper Right cell indicates high values in the first variable and high values in the second variable
+
+The other grid cells represent midpoints in the variables. You can create these bivariate maps in [R]{style="color:#6495ED"} manually or by using the `biscale` package loaded at the beginning of this exercise. Because bivariate maps blend two color schemes it is important to have the appropriate color selection. [Graduated symbology palettes](https://slu-opengis.github.io/biscale/reference/bi_pal.html) have been created that cover a range of color possibilities for the legend. These include: 
+
+<p align="center"><div class="zoom"><img src= "Images/biscale-bivariate-colors.png" alt="Biscale Bivariate Color Palettes" style="width:100%"></div></p>
+
+Like the visualization you created for [Exercise 3, Step 3](https://chrismgentry.github.io/GIS1-Exercise-4/#13_Step_Three:_The_Visualization), you will rely on syntax from `cowplot` to overlay the map and legend from `biscale`. However, currently the only demographic data in this exercise is by race. So before you begin this process you need to take the additional step of connecting the population data from [Exercise 3, Step 2](https://chrismgentry.github.io/GIS1-Exercise-3/#12_Step_Two:_The_Analyses). The same script can be used to obtain the dataset:
+
+```{r population data, message=FALSE, warning=FALSE, echo=TRUE}
+population <- read.csv('https://raw.githubusercontent.com/chrismgentry/GIS1-Exercise-3/main/Data/mont_co_pop.csv', colClasses=c(Tract="character"))
+```
+
+To connect the data to the census tract dataset **_complete_** the following script:
+
+```{r connect pop data to tracts, message=FALSE, warning=FALSE, echo=TRUE}
+#census_with_pop <- merge(x = census_tract_dataset, y = DATASET, by.x = "VARIABLE", by.y = "VARIABLE", all = TRUE)
+```
+
+If you have questions about completing the script above review the information from [Exercise 3, Step 2](https://chrismgentry.github.io/GIS1-Exercise-3/#12_Step_Two:_The_Analyses) or from similar steps earlier in this exercise.
+
+To create the bivariate dataset you need to use the `bi_class` function from _biscale_.
+
+```{r bivariate data, message=FALSE, warning=FALSE, echo=TRUE}
+bivariate_data <- bi_class(census_with_pop, x = total_pop, y = BF_Count, dim = 3, style = "jenks")
+```
+
+In this script you identify the dataset to be used to create the _bi_class_ data. You identify the x variable, in this example total population and the y variable for the count of brownfields. Finally you provide the number of dimensions (3) and _style_ to calculate the divisions in the data. For this example you will use [Jenks Natural Breaks Classification](https://pro.arcgis.com/en/pro-app/latest/help/mapping/layer-properties/data-classification-methods.htm) simply identified as "jenks". 
+
+Now you can use the information above to create the visualization based on total population. You will need to create a new code block or alter the one above to identify an x variable appropriate to answer the questions posed by the County Commission and Health Department.
+
+```{r bivariate map total pop, message=FALSE, warning=FALSE, echo=TRUE}
+bivariate_map <- ggplot() +
+  geom_sf(data = bivariate_data, mapping = aes(fill = bi_class), color = "white", size = 0.1, show.legend = FALSE) +
+  geom_point(data = brownfields_dataset, aes(x=long, y=lat), color = "red") + 
+  bi_scale_fill(pal = "DkViolet", dim = 3) +
+  theme_void()
+```
+
+You can use this same example script to create a map based on a different demographic variable (x) as long as it is identified appropriately in the **bivariate_data** script block above. Next you need to create an object to serve as the legend. Unfortunately, because `biscale` legends are not linked to the data you will need to overlay it as an "image". So be careful that any changes made to the data are reflected in the legend as well.
+
+```{r bivariate map legend, message=FALSE, warning=FALSE, echo=TRUE}
+legend <- bi_legend(pal = "DkViolet",
+                    dim = 3,
+                    xlab = "Total Population",
+                    ylab = "No. Brownfields",
+                    size = 10)
+```
+
+With the map and legend objects created you can now script the base of the final map using the same process as the [last exercise](https://chrismgentry.github.io/GIS1-Exercise-4/#13_Step_Three:_The_Visualization).
+
+```{r final map, message=FALSE, warning=FALSE, echo=TRUE}
+final_map <- ggdraw() +
+  draw_plot(bivariate_map, 0, 0, 1, 1) +
+  draw_plot(legend, 0.7, 0, 0.25, 0.25)
+final_map
+```
+
+For this map, total population was simply used to provide an example script. So to finish this exercise you will need to alter the **x** variable in the _bivariate_data_ script to determine if there is any relationship between demographics (race or age) for the County Commission and Health Department. 
 
 <big><b>Question No. 4</b></big>
 <blockquote>
-_Insert Text Here_
+Which census tract contains the most brownfields?
 </blockquote>
 
 </details>
@@ -714,4 +778,4 @@ In the report you provide to the County Commission, Stormwater Management, Healt
 - What demographic could be the most impacted by brownfields?
   - By examining the tract with the most brownfields, what demographic is the most impacted, and how does it relate to location within the city/county?
 
-When complete, send a link to your _Colab Notebook_ or word document with answers to Questions 1-4 and your completed map via email.
+Be sure to include mpas you created to support your report. When complete, send a link to your _Colab Notebook_ or word document with answers to Questions 1-4 and your completed map(s) via email.
