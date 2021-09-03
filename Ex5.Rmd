@@ -260,7 +260,7 @@ crs(brownfields_data)
 crs(montco_tracts)
 ```
 
-You can see they are all in different projections. Therefore you need to reproject them under a single crs. For this exercise you will use **EPSG:4326** which in R appears as _+proj=longlat +datum=WGS84 +no_defs_ when referenced in the script. Because the brownfields data is already in this crs you can use it or the EPSG to correct the other datasets. Remember from _Exercise 3_ that data from `tigris` is in a slightly different spatial data structure (_sf_ vs. _SpatialPolygonsDataFrame_) so the process to reproject that data will vary from the watersheds dataset.
+You can see they are all in different projections. Therefore you need to reproject them under a single crs. For this exercise you will use **EPSG:4326** which in R appears as _+proj=longlat +datum=WGS84 +no_defs_ when referenced in the script. Because the brownfields data is already in this crs you can use it or the EPSG to correct the other datasets. Remember from _Exercise 3_ that data from `tigris` is in a slightly different spatial data structure ( _sf_ vs. _SpatialPolygonsDataFrame_) so the process to reproject that data will vary from the watersheds dataset.
 
 ```{r reproject data, message=FALSE, warning=FALSE, echo=TRUE}
 watersheds_data <- spTransform(watersheds_data, crs(brownfields_data))
@@ -399,13 +399,92 @@ How many watersheds cover Montgomery County? Although they have been clipped fro
 <details>
 <summary><big>View Directions in <b> [R]{style="color:#6495ED"} </b></big></summary>
 
-Blah...blah...blah...
+There are some additional processing steps needed on the collected datasets before you can move on to the visualizations. In [Exercise 3, Step 2](https://chrismgentry.github.io/GIS1-Exercise-3/#12_Step_Two:_The_Analyses) you used the `merge` function to combined the census tracts and population data. In this exercise you will repeat those steps to connect the _demographics_ dataset to the census tracts.
+
+```{r add demographics data, message=FALSE, warning=FALSE, echo=TRUE}
+census_tracts <- merge(x = montco_tracts, y = demographics, by.x = "NAME", by.y = "Tract", all = TRUE)
+```
+
+By plotting the _brownfield_ or _watersheds_ data using `ggplot2` or quickly using `plot(x)` where x = the name of the dataset, you will like be able to determine that the data included extends far beyond the boundaries of Montgomery County. In the previous [exercise](https://chrismgentry.github.io/GIS1-Exercise-4/#12_Step_Two:_The_Analyses) the `intersect` function was used to clip out the counties within the hurricane buffer. In this exercise you will use the `crop` function to see how it varies from `intersect`. For this step you will want to crop the brownfields and watersheds datasets by the census tracts to retain only those within the county.
+
+```{r crop data, message=FALSE, warning=FALSE, echo=TRUE}
+montco_brownfields <- crop(brownfields_data,census_tracts)
+montco_watersheds <- crop(watersheds_data,census_tracts)
+```
+
+If you create a `ggplot()` of the data you will see how the datasets were subset. Essentially, a bounding box (extent of the dataset from the most upper-left portion to the lower-right) was created for the census tract data and any data within that box was retained. Why might this potentially be problematic in some instances? In what instance might this be the best method?
+
+Before proceeding to the visualization portion you need to create a couple tables to help answer the questions asked by your community partners. One being how many brownfield occur within each watershed and census tract. To do this you can use the `over` function from the `rgeos` to create a count of the overlapping data. This is called a _spatial join_ and it returns a count of the points that fall within a specific polygon. More information on `over` can be found [here](https://www.rdocumentation.org/packages/rgeos/versions/0.5-5/topics/over).
+
+```{r spatial join with watersheds, message=FALSE, warning=FALSE, echo=TRUE}
+brownfields_per_watershed <- over(montco_brownfields,montco_watersheds)
+watershed_table <- as.data.frame(table(brownfields_per_watershed$HUC_12))
+watershed_table <- transform(watershed_table, Var1 = as.character(Var1))
+colnames(watershed_table) <- c("HUC_12","BF_Count")
+watershed_table
+```
+
+In the script above, `over` created the spatial join analysis. The next line converted the information into a dataframe table with columns of variables and rows of observations. However, because the watershed names (HUC_12) a numeric, the table would not be able to be joined to a previous dataset because the numeric name for the watershed was treated as a character (nominal data). So the `transform` function was used to convert the names to characters. Finally, `colnames` was used to rename the columns to names that are more appropriate for the data.
+
+Once the table has been created you will need to connect the table to the original data so the information can potentially be included in the visualization. Because some of the watershed do no contain a brownfield there will be NA values reported for those observations. So there will be a line added to replace the NA values with zeros in the script below:
+
+```{r connect table to watersheds, message=FALSE, warning=FALSE, echo=TRUE}
+montco_watershed_data <- merge(x = montco_watersheds, y = watershed_table, by.x = "HUC_12", by.y = "HUC_12", all = TRUE)
+montco_watershed_data@data$BF_Count[is.na(montco_watershed_data@data$BF_Count)] <- 0
+montco_watershed_data@data
+```
+
+While you have seen the `merge` function before, notice the syntax for the second line. Because the data is a SpatialPolygonsDataFrame the data table that contains the data will be held in a _slot_ (a container for information in certain file types) call **data**. So to examine the information you will call to the object and add _@data_ following the object name. In the example above, the script is identifying the **BF_Count** variable in the watersheds data slot and saying "if there _is_ a _na_ value in that variable within the slot, it should be replaced with a 0." If you examine the object only you will notice there are actually several slots including:
+
+- bb = bounding box
+- data = the data table
+- plotOrder = the order of the polygons when drawn
+- polygons = the longitude and latitude values corresponding to the different polygons
+- proj4string = the crs information
+
+Remember that you should always examine new datasets when they are imported into your project. Because the census tract data is a slightly different format than the watershed you will complete a very similar process to the above script with a slight modification to convert the census tracts to a SpatialPolygonsDataFrame.
+
+```{r create tracts table, message=FALSE, warning=FALSE, echo=TRUE}
+census_tracts_spdf <- sf::as_Spatial(census_tracts)
+brownfields_per_tract <- over(montco_brownfields,census_tracts_spdf)
+census_tract_table <- as.data.frame(table(brownfields_per_tract$NAME))
+census_tract_table <- transform(census_tract_table, Var1 = as.character(Var1), Freq = as.numeric(Freq))
+colnames(census_tract_table) <- c("Name","BF_Count")
+census_tract_table
+```
+
+With the table created you can now attach it to the original census data.
+
+```{r connect to tracts, message=FALSE, warning=FALSE, echo=TRUE}
+census_tract_dataset <- merge(x = census_tracts, y = census_tract_table, by.x = "NAME", by.y = "Name", all = TRUE)
+census_tract_dataset$BF_Count[is.na(census_tract_dataset$BF_Count)] <- 0
+str(census_tract_dataset)
+```
+
+while you could have kept the SpatialPolygonsDataFrame version of the census data, it is important to know how to manage different classes of data. So in this exercise the census tract data will continue to be [simple features (sf)](https://cran.r-project.org/web/packages/sf/vignettes/sf1.html) data while the watershed data will be [sp](https://cran.r-project.org/web/packages/sp/vignettes/intro_sp.pdf).
+
+If you examine the brownfields dataset it is also a type of _sp_ data called a **SpatialPointsDataFrame**. Because the values are points and not polygons you can see the type changes accordingly. If you create a visualization of the data you will find that while crop worked to subset the information based on the bounding rectangle of the census tracts, because of the shape of Montgomery County and the location of the brownfields one record was retained erroneously. The first record "The Compost Company" is located south of the county and therefore needs to be removed from the dataset. To do this you will convert the brownfields dataset to a data frame and remove the first row of data. Because items in a data frame can be identified by row (first value) and column (second value) simply adding [-1,] behind the object name will "subrtract" the entire row from the dataset. Since you are already editing the data, it would also make sense to rename the column to names that match `ggplot2` nomenclature.
+
+```{r convert fix rename brownfields, message=FALSE, warning=FALSE, echo=TRUE}
+brownfields_dataset <- as.data.frame(montco_brownfields)
+colnames(brownfields_dataset) <- c("Name", "long", "lat", "NA")
+brownfields_dataset <- brownfields_dataset[-1,]
+brownfields_dataset
+```
+
+Finally, just in case you need a simple outline of Montgomery County for your visualization in the next step you can create an object polygon of the county with a similar script to create the states information in [Exercise 2, Step 1](https://chrismgentry.github.io/GIS1-Exercise-2/#11_Step_One:_The_Data).
+
+```{r create montgomery county polygon, message=FALSE, warning=FALSE, echo=TRUE}
+counties <- map_data("county")
+tn_counties <- subset(counties, region == "tennessee")
+montco <- subset(tn_counties, subregion == "montgomery")
+```
 
 <big><b>Question No. 2</b></big>
 <blockquote>
-_Insert Text Here_
+How many watersheds cover Montgomery County? Although they have been clipped from their original geometry, which watershed is the largest? Which is the smallest?
 </blockquote>
-
+<small>HINT: View acres in the watershed dataset.</small>
 </details>
 
 ## Step Three: The Visualization
@@ -420,12 +499,12 @@ Examine the spatial distribution of the brownfield throughout the county. The cl
 
 In the resulting window, select the following parameters (your file names may vary):
 
-- Target Features = montgomery county watersheds
-- Join Features = montgomery county brownfields
+- Target Features = Montgomery County watersheds
+- Join Features = Montgomery County brownfields
 - Output Feature Class = This is where you name the new dataset. For continuity you can name it something like: brownfields_per_watershed.shp
 - Join Operation = Choose "Join one to one" from the drop-down menu
   - Keep all Target Features should remain checked
-Match Option = Choose "Intersect" from the drop-down menu
+- Match Option = Choose "Intersect" from the drop-down menu
 
 You can leave the remaining items blank and click OK.
 
@@ -476,11 +555,32 @@ Which watershed contains the most brownfields?
 
 <details><summary><big>View directions in <b> [R]{style="color:#6495ED"} </b></span></big></summary>
 
-Blah...blah...blah...
+Examine the spatial distribution of the brownfield throughout the county. The clustering should be relatively apparent and might match up with your knowledge of industrial activities in the various areas of Montgomery County. Use the skills you developed in Exercises [4](https://chrismgentry.github.io/GIS1-Exercise-4/#13_Step_Three:_The_Visualization), [3](https://chrismgentry.github.io/GIS1-Exercise-3/#13_Step_Three:_The_Visualization), and [2](https://chrismgentry.github.io/GIS1-Exercise-2/) to finish the scripts below and create the visualizations for the number of brownfields per watershed and the number of brownfields per census tract. Don't forget to add all of the necessary map elements and feel free to add any ancillary data from this or previous exercises that enhance your map.
+
+Watershed Map:
+```{r watershed visualization, message=FALSE, warning=FALSE, echo=TRUE}
+#ggplot() +
+#geom_polygon(data = DATASET, aes(x=long, y=lat, group=group, fill = SELECT THE APPROPRIATE VARIABLE), color = "gray", size = 0.25, linetype="dashed") + 
+#geom_polygon(data = montco, aes(x=long, y=lat, group=group), fill = NA, color = "black", size = 1) + 
+#geom_point(data = DATASET, aes(x=long, y=lat), color = "SELECT A COLOR") +
+#coord_fixed() +
+#ADD THE NECESSARY ELEMENTS HERE
+```
+
+Census Tract Map:
+```{r census tract visualization, message=FALSE, warning=FALSE, echo=TRUE}
+#ggplot() +
+#geom_sf(data = DATASET, aes(fill = SELECT THE APPROPRIATE VARIABLE)) + scale_fill_viridis_c(direction = -1, option = "A") +
+#geom_point(data = DATASET, aes(x=long, y=lat), color = "red") +
+#coord_sf() +
+#ADD THE NECESSARY ELEMENTS HERE
+```
+
+Remember to remove all \# comment tags before running the edited scripts.
 
 <big><b>Question No. 3</b></big>
 <blockquote>
-_Insert Text Here_
+Which watershed contains the most brownfields?
 </blockquote>
 
 </details>
