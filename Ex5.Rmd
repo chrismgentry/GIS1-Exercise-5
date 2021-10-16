@@ -627,7 +627,7 @@ Which census tract contains the most brownfields?
 
 <details><summary><big>View directions in <b> [QGIS]{style="color:#006400"} </b></span></big></summary>
 
-Using the skills you learned in this and previous exercises, create a new _Join attributes by location (Summary)_ between the _census tracts_ and _brownfields_ datasets (for this exercise ignore any datum warning). As with the previous spatial join, you should now have an additional variable labeled "Name_count" that details the number of brownfields per census tract.
+Using the skills you learned in this and previous exercises, create a new _Join attributes by location (Summary)_ between the _census_tracts_ and _brownfields_ datasets (for this exercise ignore any datum warning). As with the previous spatial join, you should now have an additional variable labeled "Name_count" that details the number of brownfields per census tract.
 
 One way you can view two variables at once on a map is to create bivariate symbology. This creates a grid of colors with an X and Y axis with the following categories:
 
@@ -638,7 +638,7 @@ One way you can view two variables at once on a map is to create bivariate symbo
 - Where the Bottom Right cell indicates low values in the first variable and high values in the second variable
 - Where the Upper Right cell indicates high values in the first variable and high values in the second variable
 
-The other grid cells represent midpoints in the variables. You can create these bivariate maps in QGIS with some editing of the individual color palettes in your graduate colors map and by using a plug-in to create the legend. In order to create the map you first need to duplicate your layer. This example will use the watershed dataset with the "Name_count" variable for number of brownfields. You should be using the census layer that contains the brownfield count you made in the first part of this section. To duplicate a layer, right/CRTL click on a layer and select **Duplicate Layer**. If it helps you to keep the two layers organized, you can amend their layer name to include the variable used for the graduated colors (e.g. watersheds_brownfields_count or watersheds_brownfields_acres). Otherwise just before you remember what each one is displaying.
+The other grid cells represent midpoints in the variables. You can create these bivariate maps in QGIS with some editing of the individual color palettes in your graduate colors map and by using a plug-in to create the legend. In order to create the map you first need to duplicate your layer. This example will use the _census tract_ dataset with the "Name_count" variable for number of brownfields and variables for different demographics such as total population (tot_pop). To duplicate a layer, right/CRTL click on a layer and select **Duplicate Layer**. If it helps you to keep the two layers organized, you can amend their layer name to include the variable used for the graduated colors (e.g. tracts_brownfields_count or tracts_brownfields_pop). Otherwise just remember what each one is displaying.
 
 Next, you will need to create a graduated symbology for each layer with three (3) categories and a specific color palette. Because bivariate maps blend two color schemes it is important to have the appropriate color selection. Here is an example of several bivariate color palettes from [Joshua Stevens](https://www.joshuastevens.net/cartography/make-a-bivariate-choropleth-map/)
 
@@ -646,13 +646,13 @@ Next, you will need to create a graduated symbology for each layer with three (3
 
 This example will use the second color palette. There are a few steps required to match your graduated colors categories to the color palettes on the X and Y axes in the image above:
 
-  1. Select the appropriate _value_. Acres will be used for this example.
+  1. Select the appropriate _value_. Tot_Pop and Name_Count will be used for this example.
   2. Set the classes to 3.
   3. Double-click on the first of the selected colors.
   4. In the new _Symbol Selector_ window, click on the color bar.
   5. In the next _Select Color_ window, type in the HTML notation that matches your selected palette. Remember, one of your layers will start at the bottom left and work up and the other will start and the bottom left and work to the right.
 
-Finally, click OK on the windows in Steps 3 and 4 and repeat the process for the next color moving progressively up or right on the selected bivariate palette depending on the layer. This process will need to be completed for both of the two layers you will use in your bivariate map.
+Finally, click OK on the windows in Steps 3 and 4 and repeat the process for the next color moving progressively up or right on the selected bivariate palette depending on the layer. This process will need to be completed for both of the layers (one with the brownfield count and the other with a demographic variable) you will use in your bivariate map.
 
 <p align="center"><div class="zoom"><img src= "Images/qgis-customize-color-steps.png" alt="Bivariate Color Palette Steps" style="width:100%"></div></p>
 
@@ -684,7 +684,7 @@ Remember that this is now simply an image which means you will need to manually 
 
 <p align="center"><img src= "Images/qgis-sample bivariate-legend.png" alt="Bivariate Legend Example" style="width:50%"></p>
 
-You should experiment with different demographics to see how they relate to the number of brownfields before completing the assignment. You will want to select the variable that you believe shows which demographic would most be impacted by the presence of brownfields in the various tracts.
+You should <u>experiment with different demographics</u> to see how they relate to the number of brownfields before completing the assignment. You will want to select the variable that you believe shows which demographic would most be impacted by the presence of brownfields in the various tracts.
 
 <big><b>Question No. 4</b></big>
 <blockquote>
